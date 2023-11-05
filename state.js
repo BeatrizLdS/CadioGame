@@ -88,6 +88,7 @@ export class Falling extends State {
     }
     handleInput(input) {
         if (this.player.onGround()) this.player.setState(states.RUNNING);
+        else if (input == "PRESS down") this.player.setState(states.ROLLING);
     }
 }
 
@@ -112,7 +113,7 @@ export class Rolling extends State {
 
 export class RunningDown extends State {
     constructor(player) {
-        super('RUNNING DOWN');
+        super('SLIDING');
         this.player = player;
         this.numberFrames = 7;
     }
@@ -120,5 +121,9 @@ export class RunningDown extends State {
         this.player.frameY = 7;
     }
     handleInput(input) {
+        if (this.player.finishedSlide()) {
+            this.player.setState(states.RUNNING)
+        }
+        else if (input == "PRESS up") this.player.setState(states.JUMPING);
     }
 }

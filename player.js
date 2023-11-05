@@ -4,8 +4,15 @@ export default class Player {
     constructor(gameWidth, gameHeight) {
         this.gameWidth = gameWidth;
         this.gameHeight = gameHeight;
-        this.states = [new Standing(this), new Running(this), new StandingDown(this), new Jumping(this), 
-            new Falling(this), new RunningDown(this), new Rolling(this)];
+        this.states = [
+            new Standing(this), 
+            new Running(this), 
+            new StandingDown(this), 
+            new Jumping(this), 
+            new Falling(this), 
+            new RunningDown(this), 
+            new Rolling(this)
+        ];
         this.currentState = this.states[0];
         this.image = document.getElementById('dogImage');
         this.spriteWidth = 575;
@@ -43,5 +50,9 @@ export default class Player {
     }
     onGround() {
         return this.y >= this.gameHeight - this.spriteHeight/2
+    }
+    finishedSlide() {
+        console.log(this.frameX)
+        return this.frameX == this.currentState.numberFrames - 1
     }
 }
