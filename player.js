@@ -1,7 +1,7 @@
 import { Standing, Running, StandingDown, Jumping, Falling, RunningDown, Rolling} from "./state.js";
 
 export default class Player {
-    constructor(gameWidth, gameHeight) {
+    constructor(gameWidth, gameHeight, selectedCharacter) {
         this.gameWidth = gameWidth;
         this.gameHeight = gameHeight;
         this.states = [
@@ -14,9 +14,12 @@ export default class Player {
             new Rolling(this)
         ];
         this.currentState = this.states[0];
-        this.image = document.getElementById('dogImage');
+
+        // define sprite
+        this.image = document.getElementById(selectedCharacter);
         this.spriteWidth = 575;
         this.spriteHeight = 523;
+        
         this.x = this.gameWidth/2 - this.spriteWidth/8;
         this.y = this.gameHeight - this.spriteHeight/2;
         this.velocityY = 0;
