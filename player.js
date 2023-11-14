@@ -1,7 +1,8 @@
 import { Standing, Running, StandingDown, Jumping, Falling, RunningDown, Rolling} from "./state.js";
 
 export default class Player {
-    constructor(gameWidth, gameHeight) {
+    constructor(gameWidth, gameHeight, groundHeight) {
+        this.groundHeight = groundHeight;
         this.gameWidth = gameWidth;
         this.gameHeight = gameHeight;
         this.states = [new Standing(this), new Running(this), new StandingDown(this), new Jumping(this), 
@@ -10,14 +11,14 @@ export default class Player {
         this.image = document.getElementById('dogImage');
         this.spriteWidth = 575;
         this.spriteHeight = 523;
-        this.x = this.gameWidth/2 - this.spriteWidth/8;
-        this.y = this.gameHeight - this.spriteHeight/2;
+        this.x = this.gameWidth/10;
+        this.y = this.gameHeight - (2.4 * groundHeight);
         this.velocityY = 0;
         this.weight = 0.5;
         this.frameX = 0;
         this.frameY = 0;
     }
-    draw(context) {
+    draw(context, groundHeight) {
         context.drawImage(this.image, 
             this.frameX * this.spriteWidth, this.frameY * this.spriteHeight, 
             this.spriteWidth, this.spriteHeight, 
@@ -42,6 +43,6 @@ export default class Player {
         this.currentState.enter();
     }
     onGround() {
-        return this.y >= this.gameHeight - this.spriteHeight/2
+        return this.y >= this.gameHeight - (2.5 * this.groundHeight)
     }
 }

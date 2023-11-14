@@ -1,47 +1,39 @@
 
-export default class Background {
-    constructor(gameWidth, gameHeight) {
+export default class Layer {
+    constructor(gameWidth, gameHeight, imageName, speed, x, y, width, height) {
         this.gameWidth = gameWidth;
         this.gameHeight = gameHeight;
-        this.gameSpeed = 5;
-
-        this.ground = new Image();
-        this.ground.src = 'ground.png';
-        this.groundWidth = 1100;
-        this.groundHeigh = 88;
-
-        this.sky = new Image();
-        this.sky.src = 'sky.png';
-
+        this.speed = speed;
+        this.image = new Image();
+        this.image.src = imageName;
+        this.x = x;
+        this.y = y;
+        this.width = width;
+        this.height = height;
         this.x1 = 0;
         this.x2 = gameWidth;
     }
 
     draw(context) {
-        context.drawImage(this.sky, 
-            this.gameWidth/6 + this.x1, 0,
-            1000, 500);
-            context.drawImage(this.sky, 
-                this.gameWidth/6 + this.x2, 0,
-                1000, 500);
-
-        context.drawImage(this.ground, 
-            0 + this.x1, this.gameHeight - this.groundHeigh,
-            this.gameWidth, this.groundHeigh);
-        context.drawImage(this.ground, 
-            this.x2, this.gameHeight - this.groundHeigh,
-            this.gameWidth, this.groundHeigh);
+        context.drawImage(this.image,
+            this.x1 + this.x, this.y,
+            this.width, this.height
+        );
+        context.drawImage(this.image,
+            this.x2 + this.x, this.y,
+            this.width, this.height
+        );
     }
 
     update() {
-        this.x1 -= this.gameSpeed;
-        this.x2 -= this.gameSpeed;
+        this.x1 = Math.floor(this.x1 - this.speed);
+        this.x2 = Math.floor(this.x2 - this.speed);
 
         if (this.x1 < -this.gameWidth) {
-            this.x1 = this.gameWidth - this.gameSpeed;
+            this.x1 = this.gameWidth - this.speed;
         }
         if (this.x2 < -this.gameWidth) {
-            this.x2 = this.gameWidth - this.gameSpeed;
+            this.x2 = this.gameWidth - this.speed;
         }
     }
 }
