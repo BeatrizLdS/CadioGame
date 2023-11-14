@@ -1,3 +1,5 @@
+import {gameSpeed, updateGameSpeed} from './script.js';
+
 export const states = {
     STANDING : 0,
     RUNNING : 1,
@@ -23,6 +25,7 @@ export class Standing extends State {
     enter() {
         this.player.frameY = 0;
         this.player.weight = 0.5;
+        updateGameSpeed(0);
     }
     handleInput(input) {
         if (input === 'PRESS right') this.player.setState(states.RUNNING);
@@ -38,6 +41,8 @@ export class Running extends State {
     }
     enter() {
         this.player.frameY = 3;
+        updateGameSpeed(5);
+        console.log(gameSpeed);
     }
     handleInput(input) {
         if (input === 'PRESS left') this.player.setState(states.STANDING);
@@ -54,6 +59,7 @@ export class StandingDown extends State {
     }
     enter() {
         this.player.frameY = 5;
+        updateGameSpeed(0);
     }
     handleInput(input) {
         if (input === 'PRESS up') this.player.setState(states.STANDING);
@@ -69,6 +75,7 @@ export class Jumping extends State {
     enter() {
         this.player.frameY = 1;
         this.player.velocityY -= 20;
+        updateGameSpeed(4);
         console.log(this.player.velocityY);
     }
     handleInput(input) {
@@ -85,6 +92,7 @@ export class Falling extends State {
     }
     enter() {
         this.player.frameY = 2;
+        updateGameSpeed(4.5);
     }
     handleInput(input) {
         if (this.player.onGround()) this.player.setState(states.RUNNING);
@@ -102,6 +110,7 @@ export class Rolling extends State {
         this.player.frameY = 6;
         this.player.weight = 2;
         this.player.velocityY = 0;
+        updateGameSpeed(7);
     }
     handleInput(input) {
         if (this.player.onGround()){
@@ -119,6 +128,7 @@ export class RunningDown extends State {
     }
     enter() {
         this.player.frameY = 7;
+        updateGameSpeed(4);
     }
     handleInput(input) {
         if (this.player.finishedSlide()) {
