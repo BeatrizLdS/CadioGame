@@ -5,17 +5,19 @@ import Layer from './background.js';
 
 export let gameSpeed = 0;
 let gameObjects = [];
+let context;
 
 export function updateGameSpeed(speed) {
     gameSpeed = speed;
     gameObjects.forEach(object => {
         object.speed = gameSpeed;
+        object.draw(context);
     })
 }
 
 function setupGame() {
     const canvas = document.getElementById('canvas1');
-    const context = canvas.getContext('2d');
+    context = canvas.getContext('2d');
   
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
@@ -30,6 +32,13 @@ function setupGame() {
       canvas.width, 90
     );
   
+    let groundStatic = new Layer(
+        canvas.width, canvas.height,
+        'ground.png', 0,
+        0, canvas.height - 90,
+        canvas.width, 90
+      );
+
     let sky = new Layer(
       canvas.width, canvas.height,
       'sky.png', gameSpeed / 5,
@@ -45,6 +54,9 @@ function setupGame() {
       context.clearRect(0, 0, canvas.width, canvas.height);
       control++;
   
+      groundStatic.draw(context);
+      groundStatic.update();
+
       gameObjects.forEach(object => {
         object.draw(context);
         object.update();

@@ -50,7 +50,7 @@ export default class Player {
         this.currentState.enter();
     }
     onGround() {
-        return this.y >= this.gameHeight - (2.5 * this.groundHeight)
+        return this.y + 5 >= this.gameHeight - (2.5 * this.groundHeight)
     }
     finishedSlide() {
         console.log(this.frameX)
