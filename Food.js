@@ -5,4 +5,12 @@ class Food {
         this.width = 100;
         this.height = 100;
     }
+
+    update() {
+
+    }
+    
+    draw() {
+
+    }
 }

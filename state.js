@@ -1,4 +1,4 @@
-import {gameSpeed, updateGameSpeed} from './script.js';
+import {updateSpeed} from './script.js';
 
 export const states = {
     STANDING : 0,
@@ -25,7 +25,7 @@ export class Standing extends State {
     enter() {
         this.player.frameY = 0;
         this.player.weight = 0.5;
-        updateGameSpeed(0);
+        updateSpeed(0);
     }
     handleInput(input) {
         if (input === 'PRESS right') this.player.setState(states.RUNNING);
@@ -41,8 +41,7 @@ export class Running extends State {
     }
     enter() {
         this.player.frameY = 3;
-        updateGameSpeed(5);
-        console.log(gameSpeed);
+        updateSpeed(5);
     }
     handleInput(input) {
         if (input === 'PRESS left') this.player.setState(states.STANDING);
@@ -59,7 +58,7 @@ export class StandingDown extends State {
     }
     enter() {
         this.player.frameY = 5;
-        updateGameSpeed(0);
+        updateSpeed(0);
     }
     handleInput(input) {
         if (input === 'PRESS up') this.player.setState(states.STANDING);
@@ -75,8 +74,7 @@ export class Jumping extends State {
     enter() {
         this.player.frameY = 1;
         this.player.velocityY -= 20;
-        updateGameSpeed(4);
-        console.log(this.player.velocityY);
+        updateSpeed(4);
     }
     handleInput(input) {
         if (input === 'PRESS down') this.player.setState(states.ROLLING);
@@ -92,7 +90,7 @@ export class Falling extends State {
     }
     enter() {
         this.player.frameY = 2;
-        updateGameSpeed(4.5);
+        updateSpeed(4.5);
     }
     handleInput(input) {
         if (this.player.onGround()) this.player.setState(states.RUNNING);
@@ -110,7 +108,7 @@ export class Rolling extends State {
         this.player.frameY = 6;
         this.player.weight = 2;
         this.player.velocityY = 0;
-        updateGameSpeed(7);
+        updateSpeed(7);
     }
     handleInput(input) {
         if (this.player.onGround()){
@@ -128,7 +126,7 @@ export class RunningDown extends State {
     }
     enter() {
         this.player.frameY = 7;
-        updateGameSpeed(4);
+        updateSpeed(4);
     }
     handleInput(input) {
         if (this.player.finishedSlide()) {
