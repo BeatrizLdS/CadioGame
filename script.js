@@ -27,21 +27,21 @@ function setupGame() {
   
     let ground = new Layer(
       canvas.width, canvas.height,
-      'ground.png', gameSpeed,
+      './Resources/Layer/ground.png', gameSpeed,
       0, canvas.height - 90,
       canvas.width, 90
     );
   
     let groundStatic = new Layer(
         canvas.width, canvas.height,
-        'ground.png', 0,
+        './Resources/Layer/ground.png', 0,
         0, canvas.height - 90,
         canvas.width, 90
       );
 
     let sky = new Layer(
       canvas.width, canvas.height,
-      'sky.png', gameSpeed / 5,
+      './Resources/Layer/sky.png', gameSpeed / 5,
       canvas.width / 6, 0,
       1000, 500
     );
