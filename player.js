@@ -1,4 +1,4 @@
-import { Standing, Running, StandingDown, Jumping, Falling, RunningDown, Rolling} from "./state.js";
+import { Running, Jumping, Falling, RunningDown, Rolling} from "./state.js";
 
 export default class Player {
     constructor(gameWidth, gameHeight, groundHeight) {
@@ -6,31 +6,31 @@ export default class Player {
         this.gameWidth = gameWidth;
         this.gameHeight = gameHeight;
         this.states = [
-            new Standing(this), 
             new Running(this), 
-            new StandingDown(this), 
             new Jumping(this), 
             new Falling(this), 
             new RunningDown(this), 
             new Rolling(this)
         ];
-        this.currentState = this.states[0];
-        this.image = document.getElementById('dogImage');
-        this.spriteWidth = 575;
-        this.spriteHeight = 523;
-        this.x = this.gameWidth/10;
-        this.y = this.gameHeight - (2.4 * groundHeight);
+        this.currentState = this.states[1];
+        this.image = document.getElementById('sprites');
+        this.spriteWidth = 100;
+        this.spriteHeight = 100;
+        this.x = this.gameWidth/12;
+        this.defaultY = this.gameHeight - (2.8 * groundHeight);
+        this.y = this.defaultY;
         this.velocityY = 0;
         this.weight = 0.5;
         this.frameX = 0;
         this.frameY = 0;
+        this.sliderController = 0;
     }
     draw(context, groundHeight) {
         context.drawImage(this.image, 
             this.frameX * this.spriteWidth, this.frameY * this.spriteHeight, 
             this.spriteWidth, this.spriteHeight, 
             this.x, this.y, 
-            this.spriteWidth/4, this.spriteHeight/4);
+            this.spriteWidth * 1.75, this.spriteHeight * 1.75);
     }
     update(control, input) {
         let staggerFrames = 5;
@@ -50,10 +50,14 @@ export default class Player {
         this.currentState.enter();
     }
     onGround() {
-        return this.y + 5 >= this.gameHeight - (2.5 * this.groundHeight)
+        return this.y >= this.defaultY
     }
     finishedSlide() {
-        console.log(this.frameX)
-        return this.frameX == this.currentState.numberFrames - 1
+        this.sliderController ++;
+        if (this.sliderController >= 60) {
+            this.sliderController = 0;
+            return true
+        }
+        return false
     }
 }
