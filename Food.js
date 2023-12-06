@@ -7,8 +7,8 @@ export default class Food {
         this.x = startX;
         this.originalY = y;
         this.y = y;
-        this.width = 300;
-        this.height = 300;
+        this.width = 100;
+        this.height = 100;
     }
 
     #getRandomImageName() {
@@ -24,7 +24,7 @@ export default class Food {
     }
 
     update() {
-        this.x--;
+        this.x -= 3;
     }
     
     draw(context) {

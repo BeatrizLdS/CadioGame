@@ -15,7 +15,7 @@ export default class Game {
         this.foods = [];
         this.layers = [];
         this.player;
-        this.speed = 0;
+        this.speed = 3;
     }
 
     update(input) {
@@ -37,6 +37,7 @@ export default class Game {
         })
 
         this.player.update(this.#control, input.lastKey);
+        console.log(this.player.currentState);
     }
 
     draw(context) { 
