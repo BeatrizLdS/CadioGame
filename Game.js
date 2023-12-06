@@ -4,7 +4,7 @@ import Food from './Food.js';
 
 export default class Game {
     #control = 0;
-    #timeIntervalForFood = 400;
+    #timeIntervalForFood = 200;
     #timeLastFood = 0;
 
     constructor(gameWidth, gameHeight) {
@@ -96,6 +96,11 @@ export default class Game {
     }
 
     #addNewEnemy() {
-        this.foods.push(new Food(this.gameWidth, 90));
+        var heights = [0, 1, 2];
+        var currentheight = heights[Math.floor(Math.random() * heights.length)];
+
+        this.foods.push(new Food(this.gameWidth, 
+            this.gameHeight - ( (2.5 + currentheight) * this.groundStatic.height)
+            ));
     }
 }
