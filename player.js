@@ -23,6 +23,7 @@ export default class Player {
         this.weight = 0.5;
         this.frameX = 0;
         this.frameY = 0;
+        this.sliderController = 0;
     }
     draw(context, groundHeight) {
         context.drawImage(this.image, 
@@ -52,7 +53,11 @@ export default class Player {
         return this.y >= this.defaultY
     }
     finishedSlide() {
-        console.log(this.frameX)
-        return this.frameX == this.currentState.numberFrames - 1
+        this.sliderController ++;
+        if (this.sliderController >= 60) {
+            this.sliderController = 0;
+            return true
+        }
+        return false
     }
 }

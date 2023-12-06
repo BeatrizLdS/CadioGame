@@ -93,7 +93,7 @@ export class Rolling extends State {
         this.player.frameY = 1;
         this.player.weight = 2;
         this.player.velocityY = 0;
-        updateSpeed(7);
+        // updateSpeed(7);
     }
     handleInput(input) {
         if (this.player.onGround()){
