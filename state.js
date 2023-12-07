@@ -1,11 +1,11 @@
+import {updateSpeed} from './script.js';
+
 export const states = {
-    STANDING : 0,
-    RUNNING : 1,
-    STANDING_DOWN : 2,
-    JUMPING : 3,
-    FALLING : 4,
-    RUNNING_DOWN : 5,
-    ROLLING : 6,
+    RUNNING : 0,
+    JUMPING : 1,
+    FALLING : 2,
+    RUNNING_DOWN : 3,
+    ROLLING : 4,
 }
 
 class State {
@@ -14,49 +14,20 @@ class State {
     }
 }
 
-export class Standing extends State {
-    constructor(player) {
-        super('STANDING');
-        this.player = player;
-        this.numberFrames = 7;
-    }
-    enter() {
-        this.player.frameY = 0;
-        this.player.weight = 0.5;
-    }
-    handleInput(input) {
-        if (input === 'PRESS right') this.player.setState(states.RUNNING);
-        else if (input === 'PRESS down') this.player.setState(states.STANDING_DOWN);
-    }
-}
-
 export class Running extends State {
     constructor(player) {
         super('RUNNING');
         this.player = player;
-        this.numberFrames = 9;
+        this.numberFrames = 8;
     }
     enter() {
-        this.player.frameY = 3;
+        this.player.frameY = 2;
+        this.player.y = this.player.defaultY;
+        updateSpeed(5);
     }
     handleInput(input) {
-        if (input === 'PRESS left') this.player.setState(states.STANDING);
-        else if (input === 'PRESS down') this.player.setState(states.RUNNING_DOWN);
+        if (input === 'PRESS down') this.player.setState(states.RUNNING_DOWN);
         else if (input === 'PRESS up') this.player.setState(states.JUMPING);
-    }
-}
-
-export class StandingDown extends State {
-    constructor(player) {
-        super('STANDING DOWN');
-        this.player = player;
-        this.numberFrames = 5;
-    }
-    enter() {
-        this.player.frameY = 5;
-    }
-    handleInput(input) {
-        if (input === 'PRESS up') this.player.setState(states.STANDING);
     }
 }
 
@@ -64,12 +35,12 @@ export class Jumping extends State {
     constructor(player) {
         super('JUMPING');
         this.player = player;
-        this.numberFrames = 7;
+        this.numberFrames = 4;
     }
     enter() {
-        this.player.frameY = 1;
+        this.player.frameY = 0;
         this.player.velocityY -= 20;
-        console.log(this.player.velocityY);
+        updateSpeed(5.5);
     }
     handleInput(input) {
         if (input === 'PRESS down') this.player.setState(states.ROLLING);
@@ -81,13 +52,44 @@ export class Falling extends State {
     constructor(player) {
         super('FALLING');
         this.player = player;
-        this.numberFrames = 7;
+        this.numberFrames = 4;
     }
     enter() {
-        this.player.frameY = 2;
+        this.player.frameY = 1;
+        updateSpeed(5.5);
     }
     handleInput(input) {
-        if (this.player.onGround()) this.player.setState(states.RUNNING);
+        if (this.player.onGround()) {
+            
+            this.player.setState(states.RUNNING);
+        }
+        else if (input == "PRESS down") this.player.setState(states.ROLLING);
+    }
+}
+
+export class RunningDown extends State {
+    constructor(player) {
+        super('SLIDING');
+        this.player = player;
+        this.numberFrames = 8;
+    }
+    enter() {
+        this.player.frameY = 3;
+        this.player.colisionHeight = this.player.colisionHeight/2;
+        this.player.colisionFix = (this.player.spriteHeight * 1.75) / 2;
+        updateSpeed(4);
+    }
+    handleInput(input) {
+        if (this.player.finishedSlide()) {
+            this.player.colisionHeight = this.player.spriteHeight * 1.75;
+            this.player.colisionFix = 0;
+            this.player.setState(states.RUNNING);
+        }
+        else if (input == "PRESS up") {
+            this.player.colisionHeight = this.player.spriteHeight * 1.75;
+            this.player.colisionFix = 0;
+            this.player.setState(states.JUMPING);
+        } 
     }
 }
 
@@ -95,10 +97,10 @@ export class Rolling extends State {
     constructor(player) {
         super('ROLLING');
         this.player = player;
-        this.numberFrames = 7;
+        this.numberFrames = 4;
     }
     enter() {
-        this.player.frameY = 6;
+        this.player.frameY = 1;
         this.player.weight = 2;
         this.player.velocityY = 0;
     }
@@ -110,15 +112,3 @@ export class Rolling extends State {
     }
 }
 
-export class RunningDown extends State {
-    constructor(player) {
-        super('RUNNING DOWN');
-        this.player = player;
-        this.numberFrames = 7;
-    }
-    enter() {
-        this.player.frameY = 7;
-    }
-    handleInput(input) {
-    }
-}
