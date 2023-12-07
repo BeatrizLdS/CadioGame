@@ -31,6 +31,11 @@ export default class Game {
         return false;
     }
 
+    isGameWin() {
+        if (this.score > 20) return true;
+        return false;
+    }
+
     checkCollisions() {
         // Obtém as coordenadas do jogador
         const playerX = this.player.colisionX;
@@ -73,9 +78,22 @@ export default class Game {
     }
 
     update(input) {
-        if (!this.isGameOver()) this.updateGaming(input);
-        else {
-            if ((input.lastKey == "Enter") || (input.lastKey == "Click")) this.restartGame();
+        if (this.isGameOver()) this.updateGameOver(input);
+        else if (this.isGameWin()) this.updateGameWin(input);
+        else this.updateGaming(input);
+    }
+
+    updateGameOver(input) {
+        if ((input.lastKey == "Enter") || (input.lastKey == "Click")) {
+            this.restartGame();
+            input.lastKey = "";
+        }
+    }
+
+    updateGameWin(input) {
+        if ((input.lastKey == "Enter") || (input.lastKey == "Click")) {
+            this.restartGame();
+            input.lastKey = "";
         }
     }
 
@@ -105,6 +123,7 @@ export default class Game {
 
     draw(context) { 
         if (this.isGameOver()) this.drawGameOver(context);
+        else if (this.isGameWin()) this.drawGameWin(context);
         else this.drawGaming(context);
     }
 
@@ -130,6 +149,13 @@ export default class Game {
             widthButton, heightButton);
         
     }
+
+    drawGameWin(context) {
+        let image = document.getElementById('gameWin');
+        context.drawImage(image, 
+            0, 0, 
+            this.gameWidth, this.gameHeight);
+    } 
 
     drawGaming(context) {
         this.groundStatic.draw(context);
