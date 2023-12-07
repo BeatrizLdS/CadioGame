@@ -30,6 +30,17 @@ export default class Player {
         this.colisionX = this.x + ((this.spriteWidth * 1.75)/5);
         this.colisionFix = 0;
     }
+
+    restart() {
+        this.currentState = this.states[1];
+        this.y = this.defaultY;
+        this.velocityY = 0;
+        this.frameX = 0;
+        this.frameY = 0;
+        this.sliderController = 0;
+        this.colisionFix = 0;
+    }
+
     draw(context) {
         context.drawImage(this.image, 
             this.frameX * this.spriteWidth, this.frameY * this.spriteHeight, 

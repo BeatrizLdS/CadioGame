@@ -20,7 +20,18 @@ export default class Game {
         this.score = 0;
     }
 
-    checkCollisions(contex) {
+    restartGame() {
+        this.player.restart();
+        this.foods = [];
+        this.score = 0;
+    }
+
+    isGameOver() {
+        if (this.score < 0) return true;
+        return false;
+    }
+
+    checkCollisions() {
         // Obtém as coordenadas do jogador
         const playerX = this.player.colisionX;
         const playerY = this.player.y + this.player.colisionFix;
@@ -62,6 +73,13 @@ export default class Game {
     }
 
     update(input) {
+        if (!this.isGameOver()) this.updateGaming(input);
+        else {
+            if ((input.lastKey == "Enter") || (input.lastKey == "Click")) this.restartGame();
+        }
+    }
+
+    updateGaming(input) {
         if ( this.#timeLastFood >= this.#timeIntervalForFood ) {
             this.#addNewEnemy();
             this.#timeLastFood = 0
@@ -82,9 +100,38 @@ export default class Game {
 
         this.player.update(this.#control, input.lastKey);
 
+        this.checkCollisions();
     }
 
     draw(context) { 
+        if (this.isGameOver()) this.drawGameOver(context);
+        else this.drawGaming(context);
+    }
+
+    drawGameOver(context) {
+        context.fillStyle = "#C30100";
+        context.fillRect(0, 0, this.gameWidth, this.gameHeight);
+
+        let widthText = this.gameWidth/2.5;
+        let heightText = this.gameHeight/2;
+        let imageText = document.getElementById('gameOverText');
+        context.drawImage(imageText, 
+            (this.gameWidth/2) - (widthText/2), 
+            (this.gameHeight/3) - (heightText/2), 
+            widthText, heightText);
+
+        
+        let widthButton = this.gameWidth/8;
+        let heightButton = this.gameHeight/10;
+        let imageButton = document.getElementById('gameOverButton');
+        context.drawImage(imageButton, 
+            (this.gameWidth/2) - (widthButton/2), 
+            (this.gameHeight/3) + (heightText/1.5),
+            widthButton, heightButton);
+        
+    }
+
+    drawGaming(context) {
         this.groundStatic.draw(context);
 
         this.layers.forEach( layer => {
@@ -100,8 +147,6 @@ export default class Game {
 
         this.player.draw(context);
         //this.player.drawCollisionArea(context);
-
-        this.checkCollisions(context);
     }
 
     drawScore(context) {
