@@ -40,7 +40,7 @@ export class Jumping extends State {
     enter() {
         this.player.frameY = 0;
         this.player.velocityY -= 20;
-        updateSpeed(4);
+        updateSpeed(5.5);
     }
     handleInput(input) {
         if (input === 'PRESS down') this.player.setState(states.ROLLING);
@@ -56,7 +56,7 @@ export class Falling extends State {
     }
     enter() {
         this.player.frameY = 1;
-        updateSpeed(4.5);
+        updateSpeed(5.5);
     }
     handleInput(input) {
         if (this.player.onGround()) {
@@ -75,11 +75,21 @@ export class RunningDown extends State {
     }
     enter() {
         this.player.frameY = 3;
+        this.player.colisionHeight = this.player.colisionHeight/2;
+        this.player.colisionFix = (this.player.spriteHeight * 1.75) / 2;
         updateSpeed(4);
     }
     handleInput(input) {
-        if (this.player.finishedSlide()) this.player.setState(states.RUNNING);
-        else if (input == "PRESS up") this.player.setState(states.JUMPING);
+        if (this.player.finishedSlide()) {
+            this.player.colisionHeight = this.player.spriteHeight * 1.75;
+            this.player.colisionFix = 0;
+            this.player.setState(states.RUNNING);
+        }
+        else if (input == "PRESS up") {
+            this.player.colisionHeight = this.player.spriteHeight * 1.75;
+            this.player.colisionFix = 0;
+            this.player.setState(states.JUMPING);
+        } 
     }
 }
 
@@ -93,7 +103,6 @@ export class Rolling extends State {
         this.player.frameY = 1;
         this.player.weight = 2;
         this.player.velocityY = 0;
-        // updateSpeed(7);
     }
     handleInput(input) {
         if (this.player.onGround()){
