@@ -24,13 +24,27 @@ export default class Player {
         this.frameX = 0;
         this.frameY = 0;
         this.sliderController = 0;
+
+        this.colisionHeight = this.spriteHeight * 1.75;
+        this.colisionWidth = (this.spriteWidth * 1.75)/2;
+        this.colisionX = this.x + ((this.spriteWidth * 1.75)/5);
+        this.colisionFix = 0;
     }
-    draw(context, groundHeight) {
+    draw(context) {
         context.drawImage(this.image, 
             this.frameX * this.spriteWidth, this.frameY * this.spriteHeight, 
             this.spriteWidth, this.spriteHeight, 
             this.x, this.y, 
             this.spriteWidth * 1.75, this.spriteHeight * 1.75);
+    }
+    drawCollisionArea(context) {
+        // Desenha um quadrado ao redor da área de colisão do jogador
+        context.strokeStyle = 'blue'; // Cor do quadrado (pode ser ajustada)
+        context.lineWidth = 2; // Largura da linha do quadrado (pode ser ajustada)
+    
+        context.strokeRect(
+            this.colisionX, this.y + this.colisionFix, this.colisionWidth, this.colisionHeight
+        );
     }
     update(control, input) {
         let staggerFrames = 5;

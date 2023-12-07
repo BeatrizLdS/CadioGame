@@ -16,6 +16,49 @@ export default class Game {
         this.layers = [];
         this.player;
         this.speed = 3;
+
+        this.score = 0;
+    }
+
+    checkCollisions(contex) {
+        // Obtém as coordenadas do jogador
+        const playerX = this.player.colisionX;
+        const playerY = this.player.y + this.player.colisionFix;
+        const playerWidth = this.player.colisionWidth;
+        const playerHeight = this.player.colisionHeight;
+    
+        // Verifica colisões com cada alimento
+        for (let i = this.foods.length - 1; i >= 0; i--) {
+            const food = this.foods[i];
+    
+            console.log(food.collisionFix);
+            // Obtém as coordenadas do alimento
+            const foodX = food.x + food.collisionFix;
+            const foodY = food.y + food.collisionFix;
+            const foodWidth = food.collisionDimension;
+            const foodHeight = food.collisionDimension;
+
+            // Verifica se houve colisão
+            if (
+                playerX < foodX + foodWidth &&
+                playerX + playerWidth > foodX &&
+                playerY < foodY + foodHeight &&
+                playerY + playerHeight > foodY
+            ) {
+                if (food.foodType == 'good') this.collisionWithGoodFood(food);
+                else if (food.foodType == 'bad') this.collisionWithBadFood(food);
+            }
+        }
+    }
+
+    collisionWithGoodFood(food) {
+        food.markedForDelection = true;
+        this.score += 3;
+    }
+
+    collisionWithBadFood(food) {
+        food.markedForDelection = true;
+        this.score -= 1;
     }
 
     update(input) {
@@ -32,12 +75,13 @@ export default class Game {
             layer.update();
         })
 
+        this.#removeMarkedFoods();
         this.foods.forEach( food => {
             food.update();
         })
 
         this.player.update(this.#control, input.lastKey);
-        console.log(this.player.currentState);
+
     }
 
     draw(context) { 
@@ -49,9 +93,25 @@ export default class Game {
 
         this.foods.forEach( food => {
             food.draw(context);
+            //food.drawCollisionArea(context);
         })
 
+        this.drawScore(context);
+
         this.player.draw(context);
+        //this.player.drawCollisionArea(context);
+
+        this.checkCollisions(context);
+    }
+
+    drawScore(context) {
+        let image = document.getElementById('coin');
+        context.drawImage(image, 20, 15, 60, 60);
+
+        context.font = '40px Helvica';
+
+        context.fillStyle = 'black';
+        context.fillText(this.score, 80, 60);
     }
 
     createLayers() {
@@ -100,7 +160,23 @@ export default class Game {
         var currentheight = heights[Math.floor(Math.random() * heights.length)];
 
         this.foods.push(new Food(this.gameWidth, 
-            this.gameHeight - ( (2.5 + currentheight) * this.groundStatic.height)
+            this.gameHeight - ( (2.5 + currentheight) * this.groundStatic.height), 
+            5
             ));
+    }
+
+    #removeMarkedFoods() {
+        let toRemove = this.foods.filter( food => food.markedForDelection );
+
+        // Iterar sobre o array 'toRemove'
+        for(let i = 0; i < toRemove.length; i++) {
+            // Encontrar o índice do elemento no array 'foods'
+            let index = this.foods.indexOf(toRemove[i]);
+            
+            // Remover o elemento do array 'foods'
+            if(index !== -1) {
+                this.foods.splice(index, 1);
+            }
+        }
     }
 }
