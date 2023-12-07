@@ -1,6 +1,8 @@
 import Player from './player.js';
 import Layer from './Layer.js';
 import Food from './Food.js';
+import Challenge from  './Challenge.js';
+import { updateSpeed } from './script.js';
 
 export default class Game {
     #control = 0;
@@ -15,15 +17,21 @@ export default class Game {
         this.foods = [];
         this.layers = [];
         this.player;
-        this.speed = 3;
+        this.speed = 5;
 
         this.score = 0;
+
+        this.currentChallengeType = 0;
+        this.challengeActivity = false;
     }
 
     restartGame() {
         this.player.restart();
         this.foods = [];
         this.score = 0;
+        this.speed = 5;
+        this.currentChallengeType = 0;
+        this.challengeActivity = false;
     }
 
     isGameOver() {
@@ -34,6 +42,20 @@ export default class Game {
     isGameWin() {
         if (this.score > 20) return true;
         return false;
+    }
+
+    isChallengeTime() {
+        if (this.score > 0 && this.score < 20) {
+            if (this.score > 4 && (this.currentChallengeType == 0 || this.challengeActivity)) {
+                if (this.currentChallengeType == 0) {
+                    this.currentChallengeType = 1;
+                    this.challengeActivity = true;
+                    this.createChallenge(this.currentChallengeType);
+                }
+                return true
+            }
+        }
+        return false
     }
 
     checkCollisions() {
@@ -47,7 +69,6 @@ export default class Game {
         for (let i = this.foods.length - 1; i >= 0; i--) {
             const food = this.foods[i];
     
-            console.log(food.collisionFix);
             // Obtém as coordenadas do alimento
             const foodX = food.x + food.collisionFix;
             const foodY = food.y + food.collisionFix;
@@ -80,6 +101,7 @@ export default class Game {
     update(input) {
         if (this.isGameOver()) this.updateGameOver(input);
         else if (this.isGameWin()) this.updateGameWin(input);
+        else if (this.isChallengeTime()) this.challenge.update(input, this);
         else this.updateGaming(input);
     }
 
@@ -124,6 +146,7 @@ export default class Game {
     draw(context) { 
         if (this.isGameOver()) this.drawGameOver(context);
         else if (this.isGameWin()) this.drawGameWin(context);
+        else if (this.isChallengeTime()) this.challenge.draw(context);
         else this.drawGaming(context);
     }
 
@@ -219,10 +242,20 @@ export default class Game {
         );
     }
 
+    createChallenge(type) {
+        this.challenge = new Challenge(
+            type, 
+            this.gameWidth, this.gameHeight
+        );
+    }
+
     updateSpeed(newSpeed) {
         this.speed = newSpeed;
         this.layers.forEach ( layer => {
             layer.speed = this.speed;
+        })
+        this.foods.forEach ( food => {
+            food.velocity = this.speed
         })
     }
 
@@ -232,7 +265,7 @@ export default class Game {
 
         this.foods.push(new Food(this.gameWidth, 
             this.gameHeight - ( (2.5 + currentheight) * this.groundStatic.height), 
-            5
+            this.speed
             ));
     }
 

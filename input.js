@@ -38,6 +38,8 @@ export default class InputHandler {
         });
         window.addEventListener('click', (e) => {
             this.lastKey = "Click";
+            this.x = e.clientX;
+            this.y = e.clientY;
         });
     }
 }
