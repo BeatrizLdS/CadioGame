@@ -40,15 +40,32 @@ export default class Game {
     }
 
     isGameWin() {
-        if (this.score > 20) return true;
+        if (this.score > 19) return true;
         return false;
     }
 
     isChallengeTime() {
         if (this.score > 0 && this.score < 20) {
-            if (this.score > 4 && (this.currentChallengeType == 0 || this.challengeActivity)) {
+            if ((this.score > 4 && this.score < 10) && (this.currentChallengeType == 0 || this.challengeActivity)) {
                 if (this.currentChallengeType == 0) {
                     this.currentChallengeType = 1;
+                    this.challengeActivity = true;
+                    this.createChallenge(this.currentChallengeType);
+                }
+                return true
+            }
+            if ((this.score > 9 && this.score < 15) && (this.currentChallengeType == 1 || this.challengeActivity)) {
+                if (this.currentChallengeType == 1) {
+                    this.currentChallengeType = 2;
+                    this.challengeActivity = true;
+                    this.createChallenge(this.currentChallengeType);
+                }
+                return true
+            }
+
+            if ((this.score > 14 && this.score < 20)&& (this.currentChallengeType == 2 || this.challengeActivity)) {
+                if (this.currentChallengeType == 2) {
+                    this.currentChallengeType = 3;
                     this.challengeActivity = true;
                     this.createChallenge(this.currentChallengeType);
                 }
