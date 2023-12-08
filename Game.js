@@ -40,7 +40,7 @@ export default class Game {
     }
 
     isGameWin() {
-        if (this.score > 20) return true;
+        if (this.score > 19) return true;
         return false;
     }
 
@@ -63,7 +63,7 @@ export default class Game {
                 return true
             }
 
-            if (this.score > 14 && (this.currentChallengeType == 2 || this.challengeActivity)) {
+            if ((this.score > 14 && this.score < 20)&& (this.currentChallengeType == 2 || this.challengeActivity)) {
                 if (this.currentChallengeType == 2) {
                     this.currentChallengeType = 3;
                     this.challengeActivity = true;
