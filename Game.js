@@ -19,9 +19,9 @@ export default class Game {
         this.player;
         this.speed = 5;
 
-        this.score = 10;
+        this.score = 0;
 
-        this.currentChallengeType = 1;
+        this.currentChallengeType = 0;
         this.challengeActivity = false;
     }
 
@@ -57,6 +57,15 @@ export default class Game {
             if ((this.score > 9 && this.score < 15) && (this.currentChallengeType == 1 || this.challengeActivity)) {
                 if (this.currentChallengeType == 1) {
                     this.currentChallengeType = 2;
+                    this.challengeActivity = true;
+                    this.createChallenge(this.currentChallengeType);
+                }
+                return true
+            }
+
+            if (this.score > 14 && (this.currentChallengeType == 2 || this.challengeActivity)) {
+                if (this.currentChallengeType == 2) {
+                    this.currentChallengeType = 3;
                     this.challengeActivity = true;
                     this.createChallenge(this.currentChallengeType);
                 }

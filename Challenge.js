@@ -52,11 +52,37 @@ export default class Challenge {
                 buttonsWidth, buttonsHeight
             );
         }
+        else if (type == 3) {
+            this.background = document.getElementById('thirdChallengeBackground');
+            this.title = document.getElementById('thirdChallengeTitle');
+            this.instruction = document.getElementById('thirdChallengeInstruction');
+            this.AButton = document.getElementById('thirdChallengeAButton');
+            this.BButton = document.getElementById('thirdChallengeBButton');
+
+            this.rightAnswer = 'A';
+
+            let buttonsProportion = 504/166;
+            let buttonsHeight = this.gameHeight/10;
+            let buttonsWidth = buttonsHeight * (buttonsProportion);
+
+            this.buttonARect = new Rect(
+                (this.gameWidth * 0.5) - (buttonsWidth), 
+                this.gameHeight * 0.5,
+                buttonsWidth, buttonsHeight
+            );
+
+            this.buttonBRect = new Rect(
+                (this.gameWidth * 0.5) + (10), 
+                this.gameHeight * 0.5,
+                buttonsWidth, buttonsHeight
+            );
+        }
     }
 
     draw(context) {
         if (this.type == 1) this.drawFirstType(context);
         else if (this.type == 2) this.drawSecondType(context);
+        else if (this.type == 3) this.drawThirdType(context);
     }
 
     drawFirstType(context) {
@@ -124,6 +150,38 @@ export default class Challenge {
             instructionWidth, this.gameHeight * 0.04
         ); 
 
+        context.drawImage(this.AButton,
+            this.buttonARect.x, 
+            this.buttonARect.y,
+            this.buttonARect.width, this.buttonARect.height
+        ); 
+
+        context.drawImage(this.BButton,
+            this.buttonBRect.x, 
+            this.buttonBRect.y,
+            this.buttonBRect.width, this.buttonBRect.height
+        );
+    }
+
+    drawThirdType(context) {
+        context.drawImage(this.background,
+            0, 0,
+            this.gameWidth, this.gameHeight
+        );
+
+        let titleWidth = (this.gameHeight/15) * (1646/128);
+        context.drawImage(this.title,
+            (this.gameWidth/2) - (titleWidth/2), this.gameHeight/8,
+            titleWidth, this.gameHeight/15
+        );
+
+        let instructionHeight = this.gameHeight * 0.2;
+        let instructionWidth = (instructionHeight) * (872/286);
+        context.drawImage(this.instruction,
+            (this.gameWidth/2) - (instructionWidth/2), this.gameHeight/4,
+            instructionWidth, instructionHeight
+        );
+        
         context.drawImage(this.AButton,
             this.buttonARect.x, 
             this.buttonARect.y,
