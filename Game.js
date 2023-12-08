@@ -47,32 +47,27 @@ export default class Game {
     isChallengeTime() {
         if (this.score > 0 && this.score < 20) {
             if ((this.score > 4 && this.score < 10) && (this.currentChallengeType == 0 || this.challengeActivity)) {
-                if (this.currentChallengeType == 0) {
-                    this.currentChallengeType = 1;
-                    this.challengeActivity = true;
-                    this.createChallenge(this.currentChallengeType);
-                }
-                return true
-            }
-            if ((this.score > 9 && this.score < 15) && (this.currentChallengeType == 1 || this.challengeActivity)) {
-                if (this.currentChallengeType == 1) {
-                    this.currentChallengeType = 2;
-                    this.challengeActivity = true;
-                    this.createChallenge(this.currentChallengeType);
-                }
+                if (this.currentChallengeType == 0) this.activateNextChallenge();
                 return true
             }
 
-            if ((this.score > 14 && this.score < 20)&& (this.currentChallengeType == 2 || this.challengeActivity)) {
-                if (this.currentChallengeType == 2) {
-                    this.currentChallengeType = 3;
-                    this.challengeActivity = true;
-                    this.createChallenge(this.currentChallengeType);
-                }
+            if ((this.score > 9 && this.score < 15) && (this.currentChallengeType == 1 || this.challengeActivity)) {
+                if (this.currentChallengeType == 1) this.activateNextChallenge();
+                return true
+            }
+
+            if ((this.score > 14 && this.score < 19) && (this.currentChallengeType == 2 || this.challengeActivity)) {
+                if (this.currentChallengeType == 2) this.activateNextChallenge();
                 return true
             }
         }
         return false
+    }
+
+    activateNextChallenge() {
+        this.currentChallengeType++;
+        this.challengeActivity = true;
+        this.createChallenge(this.currentChallengeType);
     }
 
     checkCollisions() {
